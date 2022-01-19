@@ -5,6 +5,7 @@
 
 #include "vector.h"
 #include "matrix.h"
+#include "util.h"
 
 enum MPITag {
     MPITag_Double,
@@ -30,11 +31,19 @@ public:
     [[nodiscard]] int rank() const;
     [[nodiscard]] int size() const;
 
+    void wait(MPI_Request* request, MPI_Status* status) const;
+
     void send_double(double* buffer, int count, int dest) const;
     void recv_double(double* buffer, int count, int source) const;
 
     void send_vector(Vector<double>* vector, int dest) const;
     void recv_vector(Vector<double>* vector, int source) const;
+
+    void isend_vector(Vector<double>* vector, int dest, MPI_Request* request) const;
+    void irecv_vector(Vector<double>* vector, int source, MPI_Request* request) const;
+
+    void bcast_vector(Vector<double>* vector, int root) const;
+
     void sync_vector(Vector<double>* vector, int source) const;
 
     void send_matrix(Matrix<double>* matrix, int dest) const;
@@ -42,6 +51,9 @@ public:
     void sync_matrix(Matrix<double>* matrix, int source) const;
 
     void fold_vector_ring(Vector<double>* vector, int offset, int count) const;
+    void fold_vector_iring(Vector<double>* vector, int offset, int count) const;
+    void fold_vector_gatherv(Vector<double>* vector, int offset, int count, int root) const;
+    void fold_vector_allgatherv(Vector<double>* vector, int offset, int count) const;
 };
 
 #endif //MPI_AVX_JACOBI_MPI_H
