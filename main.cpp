@@ -3,7 +3,7 @@
 #include <random>
 #include <thread>
 #include <chrono>
-
+#include <utility>
 
 #include "vector.h"
 #include "matrix.h"
@@ -11,9 +11,10 @@
 #include "jacobi.h"
 #include "mpi.h"
 #include "util.h"
+#include "bench.h"
 
-const int SIZE  = 20;
-const int RANGE = 10;
+const int SIZE  = 8;
+const int RANGE = 100;
 const int ITERATIONS = 50;
 
 int main(int argc, char** argv) {
@@ -38,9 +39,22 @@ int main(int argc, char** argv) {
     const int offset = offset_count.first;
     const int count  = offset_count.second;
 
-    solution = jacobi_mpi_allgatherv(matrix, result, ITERATIONS, mpi, offset, count);
+    auto func = [&] () {
+        solution = jacobi_mpi_allgatherv(matrix, result, ITERATIONS, mpi, offset, count);
+    };
+
+    int duration = benchmark(func);
 
     if (mpi.rank() == 0) {
+        std::cout << "duration: " << duration << std::endl;
+
+        auto distance = vector.distance(solution);
+
+        std::cout << "distance: " << distance << std::endl;
+
+        std::cout << "matrix" << std::endl;
+        matrix.print();
+
         std::cout << "vector" << std::endl;
         vector.print();
 
