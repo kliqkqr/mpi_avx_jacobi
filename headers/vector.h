@@ -31,6 +31,7 @@ public:
     double distance(const Vector<A>& vector) const;
 
     [[nodiscard]] Vector<double> to_double() const;
+    [[nodiscard]] Vector<float> to_float() const;
     Matrix<A> to_matrix() const;
     Vector<A> to_slice(int y, int height) const;
 
@@ -126,13 +127,26 @@ template <typename A>
 Vector<double> Vector<A>::to_double() const {
     double* buffer = (double*)std::malloc(sizeof(double) * this->height());
 
-    assert (buffer != nullptr);
+    assert(buffer != nullptr);
 
     for (int y = 0; y < this->height(); y += 1) {
         buffer[y] = (double)this->get(y);
     }
 
     return Vector<double>(this->height(), buffer);
+}
+
+template <typename A>
+Vector<float> Vector<A>::to_float() const {
+    float* buffer = (float*)std::malloc(sizeof(float) * this->height());
+
+    assert(buffer != nullptr);
+
+    for (int y = 0; y < this->height(); y += 1) {
+        buffer[y] = (float)this->get(y);
+    }
+
+    return Vector<float>(this->height(), buffer);
 }
 
 template <typename A>

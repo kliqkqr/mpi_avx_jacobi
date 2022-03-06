@@ -5,6 +5,8 @@ set(CMAKE_CXX_STANDARD 20)
 
 set(CMAKE_EXE_LINKER_FLAGS "-static")
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native -mavx")
+
 include_directories(headers "c:\\Program Files (x86)\\Microsoft SDKs")
 
 link_directories("c:\\Program Files (x86)\\Microsoft SDKs\\MPI\\Lib\\x86" "c:\\Program Files (x86)\\Microsoft SDKs\\MPI\\Lib\\x64")

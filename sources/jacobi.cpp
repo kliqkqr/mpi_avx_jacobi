@@ -1,6 +1,6 @@
 #include "jacobi.h"
 
-double next_value(const Matrix<double>& matrix, const Vector<double>& vector, const Vector<double>& last_result, int index) {
+double next_value(const Matrix<double>& matrix, const Vector<double>& vector, const Vector<double>& last_result, const int index) {
     const double scalar = 1.0 / matrix.get(index, index);
     double sum = 0.0;
 

@@ -32,16 +32,16 @@ int* Generator::random_int_array(int size, int min, int max) {
     return array;
 }
 
-Matrix<int> Generator::random_diag_dom_int_matrix(int height, int width, int min, int max) {
-    Matrix<int> matrix = Matrix<int>(height, width, 0);
+Matrix<int> Generator::random_diag_dom_int_matrix(int size, int min, int max) {
+    Matrix<int> matrix = Matrix<int>(size, size, 0);
 
-    for (int y = 0; y < height; y += 1) {
-        int* row = this->random_int_array(width, min, max);
+    for (int y = 0; y < size; y += 1) {
+        int* row = this->random_int_array(size, min, max);
 
         assert(row != nullptr);
 
         int abs_sum = 1;
-        for (int x = 0; x < width; x += 1) {
+        for (int x = 0; x < size; x += 1) {
             if (x == y) {
                 continue;
             }

@@ -17,7 +17,7 @@ public:
     int* random_int_array(int size, int min, int max);
 
     Vector<int> random_int_vector(int height, int min, int max);
-    Matrix<int> random_diag_dom_int_matrix(int height, int width, int min, int max);
+    Matrix<int> random_diag_dom_int_matrix(int size, int min, int max);
 };
 
 
