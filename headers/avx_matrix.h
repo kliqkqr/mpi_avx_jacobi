@@ -34,12 +34,22 @@ public:
     AvxMatrix(int height, int width, A default_value, int block_element_count, int align_size);
     AvxMatrix(int height, int width, A* values, int block_element_count, int align_size);
     AvxMatrix(int height, int width, std::function<A(int, int)> func, int block_element_count, int align_size);
+    AvxMatrix(int height, int width, uint8_t* buffer, int align_width, int block_element_count, int block_align_size, int align_size);
 
     [[nodiscard]] A get(int y, int x) const;
+
+    [[nodiscard]] int height() const;
+    [[nodiscard]] int width() const;
+    [[nodiscard]] int align_width() const;
+    [[nodiscard]] int block_elem_count() const;
+    [[nodiscard]] int block_align_size() const;
+    [[nodiscard]] int align_size() const;
 
     [[nodiscard]] Matrix<A> to_matrix(bool remove_align) const;
     [[nodiscard]] uint8_t* to_byte_buffer() const;
     [[nodiscard]] size_t byte_buffer_size() const;
+
+    void buffer_free();
 };
 
 template <typename A>
@@ -146,9 +156,50 @@ AvxMatrix<A>::AvxMatrix(int height, int width, std::function<A(int, int)> func, 
 }
 
 template <typename A>
+AvxMatrix<A>::AvxMatrix(int height, int width, uint8_t* buffer, int align_width, int block_element_count, int block_align_size, int align_size) {
+    this->_height           = height;
+    this->_width            = width;
+    this->_buffer           = (A*)buffer;
+    this->_align_width      = align_width;
+    this->_block_elem_count = block_element_count;
+    this->_block_align_size = block_align_size;
+    this->_align_size       = align_size;
+}
+
+template <typename A>
 A AvxMatrix<A>::get(int y, int x) const {
     A* pointer = this->_pointer(y, x);
     return *pointer;
+}
+
+template <typename A>
+int AvxMatrix<A>::height() const {
+    return this->_height;
+}
+
+template <typename A>
+int AvxMatrix<A>::width() const {
+    return this->_width;
+}
+
+template <typename A>
+int AvxMatrix<A>::align_width() const {
+    return this->_align_width;
+}
+
+template <typename A>
+int AvxMatrix<A>::block_elem_count() const {
+    return this->_block_elem_count;
+}
+
+template <typename A>
+int AvxMatrix<A>::block_align_size() const {
+    return this->_block_align_size;
+}
+
+template <typename A>
+int AvxMatrix<A>::align_size() const {
+    return this->_align_size;
 }
 
 template <typename A>
@@ -170,6 +221,11 @@ template <typename A>
 size_t AvxMatrix<A>::byte_buffer_size() const {
     const size_t size = this->_block_align_size * this->_align_width * this->_height;
     return size;
+}
+
+template <typename A>
+void AvxMatrix<A>::buffer_free() {
+    _mm_free(this->_buffer);
 }
 
 #endif //MPI_AVX_JACOBI_AVX_MATRIX_H
