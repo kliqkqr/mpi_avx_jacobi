@@ -11,7 +11,7 @@ include_directories(headers "c:\\Program Files (x86)\\Microsoft SDKs")
 
 link_directories("c:\\Program Files (x86)\\Microsoft SDKs\\MPI\\Lib\\x86" "c:\\Program Files (x86)\\Microsoft SDKs\\MPI\\Lib\\x64")
 
-add_executable(mpi_avx_jacobi main.cpp headers/matrix.h headers/generator.h sources/generator.cpp headers/vector.h headers/jacobi.h sources/jacobi.cpp headers/mpi.h sources/mpi.cpp headers/util.h sources/util.cpp headers/bench.h sources/bench.cpp headers/avx.h sources/avx.cpp)
+add_executable(mpi_avx_jacobi main.cpp headers/matrix.h headers/generator.h sources/generator.cpp headers/vector.h headers/jacobi.h sources/jacobi.cpp headers/mpi.h sources/mpi.cpp headers/util.h sources/util.cpp headers/bench.h sources/bench.cpp headers/avx.h sources/avx.cpp headers/avx_matrix.h)
 
 target_link_libraries(mpi_avx_jacobi msmpi.lib msmpifec.lib msmpifmc.lib)
 #  msmpifes.lib msmpifms.lib

@@ -15,6 +15,7 @@ class Matrix {
     int _width;
     std::unique_ptr<A[]> _buffer;
 
+protected:
     [[nodiscard]] int _index(int y, int x) const;
 
 public:
@@ -31,13 +32,13 @@ public:
 
     std::unique_ptr<A[]>& get_buffer();
 
-    int height() const;
-    int width()  const;
+    [[nodiscard]] int height() const;
+    [[nodiscard]] int width()  const;
 
     [[nodiscard]] Matrix<double> to_double() const;
     [[nodiscard]] A* copy_buffer() const;
 
-    std::string to_display() const;
+    [[nodiscard]] std::string to_display() const;
     void print() const;
 
     static void swap(Matrix<A>* first, Matrix<A>* second);

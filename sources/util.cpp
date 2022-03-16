@@ -10,3 +10,20 @@ std::pair<int, int> distribute_even(int height, int rank, int size) {
 
     return std::pair<int, int>(offset, count);
 }
+
+size_t ceil_to_multiple(size_t num, size_t factor) {
+    assert(factor > 0);
+
+    size_t rem = num % factor;
+    if (rem == 0) {
+        return num;
+    }
+
+    return num + factor - rem;
+}
+
+size_t ceil_to_power_of_2(size_t num, size_t factor) {
+    assert(factor > 0 && (factor & (factor - 1)) == 0);
+
+    return (num + factor - 1) & -factor;
+}
