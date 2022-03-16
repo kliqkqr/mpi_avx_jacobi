@@ -49,6 +49,8 @@ public:
     [[nodiscard]] uint8_t* to_byte_buffer() const;
     [[nodiscard]] size_t byte_buffer_size() const;
 
+    void print_meta() const;
+
     void buffer_free();
 };
 
@@ -219,13 +221,28 @@ uint8_t* AvxMatrix<A>::to_byte_buffer() const {
 
 template <typename A>
 size_t AvxMatrix<A>::byte_buffer_size() const {
-    const size_t size = this->_block_align_size * this->_align_width * this->_height;
+    const size_t size = this->_block_align_size * (this->_align_width / this->_block_elem_count) * this->_height;
     return size;
 }
 
 template <typename A>
 void AvxMatrix<A>::buffer_free() {
     _mm_free(this->_buffer);
+}
+
+template <typename A>
+void AvxMatrix<A>::print_meta() const {
+//    int _width;
+//    int _height;
+//    A*  _buffer;
+//
+//    int _align_width;
+//    int _block_elem_count;
+//    int _block_align_size;
+//    int _align_size;
+
+    std::cout << "height=" << this->_height << "; width=" << this->_width << "; align_width=" << this->_align_width << ";" << std::endl;
+    std::cout << "block_elem_count=" << this->_block_elem_count << "; block_align_size=" << this->_block_align_size << "; align_size=" << this->_align_size << ";" << std::endl;
 }
 
 #endif //MPI_AVX_JACOBI_AVX_MATRIX_H

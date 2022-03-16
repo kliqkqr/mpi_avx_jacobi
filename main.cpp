@@ -16,7 +16,7 @@
 #include "util.h"
 #include "bench.h"
 
-const int SIZE  = 8;
+const int SIZE  = 10;
 const int RANGE = 100;
 const int ITERATIONS = 50;
 
@@ -75,7 +75,7 @@ int test_avx_matrix_mpi(int* argc, char*** argv) {
 
     if (mpi.rank() == 0) {
         auto gen = Generator();
-        matrix = gen.random_diag_dom_int_matrix(SIZE, -RANGE, RANGE).to_double().to_avx_matrix(8, 32);
+        matrix = gen.random_diag_dom_int_matrix(SIZE, -RANGE, RANGE).to_double().to_avx_matrix(7, 32);
     }
 
     mpi.sync_avx_matrix(&matrix, 0);

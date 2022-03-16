@@ -93,7 +93,10 @@ void MPI::send_avx_matrix(AvxMatrix<A>* matrix, int dest) const {
     MPI_Send(meta, 6, MPI_INT, dest, MPITag_AvxMatrix_Meta, MPI_COMM_WORLD);
 
     uint8_t* buffer = matrix->to_byte_buffer();
-    const size_t   size   = matrix->byte_buffer_size();
+    const size_t size = matrix->byte_buffer_size();
+
+    std::cout << this->rank() << " size=" << size << std::endl;
+
     MPI_Send(buffer, size, MPI_BYTE, dest, MPITag_AvxMatrix_Buffer, MPI_COMM_WORLD);
 }
 
@@ -150,12 +153,13 @@ void MPI::sync_avx_matrix(AvxMatrix<A>* matrix, int source) const {
 
     // TODO: Broadcast
     if (this->rank() == source) {
+        matrix->print_meta();
+
         for (int i = 0; i < this->size(); i += 1) {
             if (i != source) {
                 this->send_avx_matrix(matrix, i);
             }
         }
-
         return;
     }
 
