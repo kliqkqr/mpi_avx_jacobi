@@ -68,11 +68,27 @@ int old_main(int argc, char** argv) {
     return 0;
 }
 
-#define SIZE  18
-#define BSIZE 5
-#define ALIGN 32
-#define CLEAR (-50)
+int test_avx_matrix_mpi(int* argc, char*** argv) {
+    auto mpi = MPI(argc, argv);
 
-int main() {
+    AvxMatrix<double> matrix;
+
+    if (mpi.rank() == 0) {
+        auto gen = Generator();
+        matrix = gen.random_diag_dom_int_matrix(SIZE, -RANGE, RANGE).to_double().to_avx_matrix(8, 32);
+    }
+
+    mpi.sync_avx_matrix(&matrix, 0);
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000 * mpi.rank()));
+
+    std::cout << mpi.rank() << std::endl;
+    matrix.to_matrix(false).print();
+    std::cout << std::endl;
+
     return 0;
+}
+
+int main(int argc, char** argv) {
+    return test_avx_matrix_mpi(&argc, &argv);
 }

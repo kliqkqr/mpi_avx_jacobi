@@ -9,6 +9,8 @@
 
 template <typename A> class Vector;
 
+template <typename A> class AvxMatrix;
+
 template <typename A>
 class Matrix {
     int _height;
@@ -39,6 +41,7 @@ public:
     [[nodiscard]] A* copy_buffer() const;
 
     [[nodiscard]] std::string to_display() const;
+    [[nodiscard]] AvxMatrix<A> to_avx_matrix(int block_elem_count, int align_size) const;
     void print() const;
 
     static void swap(Matrix<A>* first, Matrix<A>* second);
@@ -237,6 +240,15 @@ Vector<A> Matrix<A>::operator*(const Vector<A>& vector) const {
     }
 
     return result;
+}
+
+template <typename A>
+AvxMatrix<A> Matrix<A>::to_avx_matrix(int block_elem_count, int align_size) const {
+    std::function<A(int, int)> func = [&] (int y, int x) {
+        return this->get(y, x);
+    };
+
+    return AvxMatrix<A>(this->height(), this->width(), func, block_elem_count, align_size);
 }
 
 #endif //MPI_AVX_JACOBI_MATRIX_H
