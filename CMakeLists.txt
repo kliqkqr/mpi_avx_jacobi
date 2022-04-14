@@ -4,6 +4,7 @@ project(mpi_avx_jacobi)
 set(CMAKE_CXX_STANDARD 20)
 
 if (UNIX)
+    include_directories(headers)
 else()
     set(CMAKE_EXE_LINKER_FLAGS "-static")
 
